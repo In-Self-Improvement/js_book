@@ -55,26 +55,26 @@
     <button id="multiply">x</button>
   </div>
   <script>
-    let numOne = "";
+    let firstNumber = "";
+    let secondNumber = "";
     let operator = "";
-    let numTwo = "";
     const $operator = document.querySelector("#operator");
     const $result = document.querySelector("#result");
     $result.value = 0;
     const onNumberClick = (event) => {
-      if ($result.value == 0) {
+      if ($result.value) {
         $result.value = "";
       }
       if (!operator) {
-        numOne += event.target.textContent;
+        firstNumber += event.target.textContent;
         $result.value += event.target.textContent;
         return;
       }
       // 비어있지 않다
-      if (!numTwo) {
+      if (!secondNumber) {
         $result.value = "";
       }
-      numTwo += event.target.textContent;
+      secondNumber += event.target.textContent;
       $result.value += event.target.textContent;
     };
     document.querySelector("#num-0").addEventListener("click", onNumberClick);
@@ -89,11 +89,32 @@
     document.querySelector("#num-9").addEventListener("click", onNumberClick);
 
     const onOperatorClick = (op) => () => {
-      if (numOne) {
+      if (secondNumber) {
+        switch (operator) {
+          case "+":
+            $result.value = Number(firstNumber) + Number(secondNumber);
+            break;
+          case "-":
+            $result.value = firstNumber - secondNumber;
+            break;
+          case "*":
+            $result.value = firstNumber * secondNumber;
+            break;
+          case "/":
+            $result.value = firstNumber / secondNumber;
+            break;
+          default:
+            break;
+        }
+        firstNumber = $result.value;
+        secondNumber = "";
+        return;
+      }
+      if (firstNumber) {
         operator = op;
         $operator.value = op;
-        $result.value = 0;
-        numTwo = "";
+        $result.value = firstNumber;
+        secondNumber = "";
       } else {
         alert("숫자를 먼저 입력하세요.");
       }
@@ -111,35 +132,32 @@
       .querySelector("#multiply")
       .addEventListener("click", onOperatorClick("*"));
     document.querySelector("#calculate").addEventListener("click", () => {
-      if (numTwo) {
-        console.log("before", numOne, numTwo);
+      if (secondNumber) {
         switch (operator) {
           case "+":
-            $result.value = parseInt(numOne) + parseInt(numTwo);
-
+            $result.value = Number(firstNumber) + Number(secondNumber);
             break;
           case "-":
-            $result.value = numOne - numTwo;
+            $result.value = firstNumber - secondNumber;
             break;
           case "*":
-            $result.value = numOne * numTwo;
+            $result.value = firstNumber * secondNumber;
             break;
           case "/":
-            $result.value = numOne / numTwo;
+            $result.value = firstNumber / secondNumber;
             break;
           default:
             break;
         }
-        numOne = $result.value;
-        console.log("after", numOne, numTwo);
+        firstNumber = $result.value;
       } else {
         alert("숫자를 먼저 입력하세요.");
       }
     });
     document.querySelector("#clear").addEventListener("click", () => {
-      numOne = "";
+      firstNumber = "";
       operator = "";
-      numTwo = "";
+      secondNumber = "";
       $operator.value = "";
       $result.value = 0;
     });
