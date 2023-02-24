@@ -34,59 +34,72 @@
     <button id="num-7">7</button>
     <button id="num-8">8</button>
     <button id="num-9">9</button>
-    <button id="plus">+</button>
+    <button id="op-plus">+</button>
   </div>
   <div class="row">
     <button id="num-4">4</button>
     <button id="num-5">5</button>
     <button id="num-6">6</button>
-    <button id="minus">-</button>
+    <button id="op-minus">-</button>
   </div>
   <div class="row">
     <button id="num-1">1</button>
     <button id="num-2">2</button>
     <button id="num-3">3</button>
-    <button id="divide">/</button>
+    <button id="op-divide">/</button>
   </div>
   <div class="row">
-    <button id="clear">C</button>
+    <button id="op-clear">C</button>
     <button id="num-0">0</button>
-    <button id="calculate">=</button>
-    <button id="multiply">x</button>
+    <button id="op-calculate">=</button>
+    <button id="op-multiply">x</button>
   </div>
   <script>
     let firstNumber = "";
     let secondNumber = "";
     let operator = "";
+    let isNegativeNumber = false;
     const $operator = document.querySelector("#operator");
     const $result = document.querySelector("#result");
     $result.value = "0";
+
     const onClickNumber = (event) => {
-      if ($result.value === "0" || !secondNumber) {
+      if ($result.value == "0") {
         $result.value = "";
       }
+
       if (!operator) {
         firstNumber += event.target.textContent;
         $result.value += event.target.textContent;
         return;
       }
+
+      if (!secondNumber) {
+        $result.value = "";
+      }
+
       secondNumber += event.target.textContent;
       $result.value += event.target.textContent;
     };
+
     const onClickOperator = (op) => () => {
+      if (firstNumber == "" && op == "-") {
+        return (isNegativeNumber = true);
+      }
       if (secondNumber) {
+        isNegativeNumber && (firstNumber = -Number(firstNumber));
         switch (operator) {
           case "+":
             $result.value = Number(firstNumber) + Number(secondNumber);
             break;
           case "-":
-            $result.value = firstNumber - secondNumber;
+            $result.value = Number(firstNumber) - Number(secondNumber);
             break;
           case "*":
-            $result.value = firstNumber * secondNumber;
+            $result.value = Number(firstNumber) * Number(secondNumber);
             break;
           case "/":
-            $result.value = firstNumber / secondNumber;
+            $result.value = Number(firstNumber) / Number(secondNumber);
             break;
           default:
             break;
@@ -98,46 +111,38 @@
       if (firstNumber) {
         operator = op;
         $operator.value = op;
-        $result.value = firstNumber;
+        $result.value = isNegativeNumber ? `-${firstNumber}` : firstNumber;
         secondNumber = "";
       } else {
-        alert("숫자를 먼저 입력하세요.");
+        alert("Enter a number first.");
       }
     };
-    const onClickClear = () => () => {
+
+    const onClickClear = () => {
       firstNumber = "";
       operator = "";
       secondNumber = "";
       $operator.value = "";
       $result.value = "0";
     };
-    // 숫자
-    document.querySelector("#num-0").addEventListener("click", onClickNumber);
-    document.querySelector("#num-1").addEventListener("click", onClickNumber);
-    document.querySelector("#num-2").addEventListener("click", onClickNumber);
-    document.querySelector("#num-3").addEventListener("click", onClickNumber);
-    document.querySelector("#num-4").addEventListener("click", onClickNumber);
-    document.querySelector("#num-5").addEventListener("click", onClickNumber);
-    document.querySelector("#num-6").addEventListener("click", onClickNumber);
-    document.querySelector("#num-7").addEventListener("click", onClickNumber);
-    document.querySelector("#num-8").addEventListener("click", onClickNumber);
-    document.querySelector("#num-9").addEventListener("click", onClickNumber);
-    // 연산자
-    document
-      .querySelector("#plus")
-      .addEventListener("click", onClickOperator("+"));
-    document
-      .querySelector("#minus")
-      .addEventListener("click", onClickOperator("-"));
-    document
-      .querySelector("#divide")
-      .addEventListener("click", onClickOperator("/"));
-    document
-      .querySelector("#multiply")
-      .addEventListener("click", onClickOperator("*"));
-    document
-      .querySelector("#calculate")
-      .addEventListener("click", onClickOperator());
-    document.querySelector("#clear").addEventListener("click", onClickClear());
+
+    const numberElements = document.querySelectorAll(".row button[id^='num-']");
+
+    numberElements.forEach((element) => {
+      element.addEventListener("click", onClickNumber);
+    });
+
+    const operatorElements = document.querySelectorAll(
+      ".row button[id^='op-']"
+    );
+
+    operatorElements.forEach((element) => {
+      let operatorValue = element.textContent;
+      if (operatorValue == "C") {
+        element.addEventListener("click", onClickClear);
+      } else {
+        element.addEventListener("click", onClickOperator(operatorValue));
+      }
+    });
   </script>
 </body>
