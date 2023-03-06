@@ -64,7 +64,7 @@
     $result.value = "0";
 
     const onClickNumber = (event) => {
-      if ($result.value == "0") {
+      if ($result.value === "0") {
         $result.value = "";
       }
 
@@ -83,7 +83,7 @@
     };
 
     const onClickOperator = (op) => () => {
-      if (firstNumber == "" && op == "-") {
+      if (firstNumber === "" && op === "-") {
         return (isNegativeNumber = true);
       }
       if (secondNumber) {
@@ -138,7 +138,7 @@
 
     operatorElements.forEach((element) => {
       let operatorValue = element.textContent;
-      if (operatorValue == "C") {
+      if (operatorValue === "C") {
         element.addEventListener("click", onClickClear);
       } else {
         element.addEventListener("click", onClickOperator(operatorValue));
