@@ -20,5 +20,44 @@
 <body>
   <div id="result">추첨 결과는?</div>
   <div id="bonus">보너스:</div>
-  <script></script>
+  <script>
+    // 1~45까지 숫자 만들기
+    const numbers = Array(45)
+      .fill()
+      .map((_, index) => index + 1);
+
+    // 숫자 섞기
+    const shuffledNumbers = [];
+    while (numbers.length > 0) {
+      const randomIndex = Math.floor(Math.random() * numbers.length);
+      const [number] = numbers.splice(randomIndex, 1);
+      shuffledNumbers.push(number);
+    }
+
+    // 숫자 6개 뽑기 , 보너스 숫자 고르기
+    const winningNumbers = shuffledNumbers.slice(0, 6).sort((a, b) => a - b);
+    const bonusNumber = shuffledNumbers[6];
+
+    // 당첨 숫자 그리기
+    const drawBall = (number, $parent) => {
+      const $ball = document.createElement("div");
+      $ball.className = "ball";
+      $ball.textContent = number;
+      $parent.appendChild($ball);
+    };
+
+    // 당첨 숫자 6개 출력
+    const $result = document.querySelector("#result");
+    for (let i = 0; i < winningNumbers.length; i++) {
+      setTimeout(() => {
+        drawBall(winningNumbers[i], $result);
+      }, (i + 1) * 1000);
+    }
+
+    // 보너스 숫자
+    const $bonus = document.querySelector("#bonus");
+    setTimeout(() => {
+      drawBall(bonusNumber, $bonus);
+    }, 7000);
+  </script>
 </body>
