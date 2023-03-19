@@ -27,32 +27,59 @@
       }
 
       const tries = [];
+      // const checkFourDigitNumber = (input) => {
+      //   if (input.length !== 4) {
+      //     alert("4자리수를 입력해주세요!");
+      //     return false;
+      //   }
+      //   return true;
+      // };
+      // const checkDuplicateValues = (input) => {
+      //   if (new Set(input).size !== 4) {
+      //     alert("숫자가 중복되면 안됩니다. 다른 조합을 입력해보세요.");
+      //     return false;
+      //   }
+      //   return true;
+      // };
+      // const checkIfTriedBefore = (input) => {
+      //   if (tries.includes(input)) {
+      //     alert("이전에 시도한 값입니다. 다른 조합을 입력해보세요.");
+      //     return false;
+      //   }
+      //   return true;
+      // };
+      // const validateInput = (input) => {
+      //   return (checkFourDigitNumber(input) &&
+      //     checkDuplicateValues(input) &&
+      //     checkIfTriedBefore(input))
+      // };
+      const validateInputCondition = (input, errorMessage) => {
+        const isFourDigitNumber = input.length === 4;
+        const isDuplicated = new Set(input).size !== 4;
+        const isTriedBefore = tries.includes(input);
+
+        if (!isFourDigitNumber || isDuplicated || isTriedBefore) {
+          alert(errorMessage);
+          return false;
+        }
+        return true;
+      };
+
       const checkFourDigitNumber = (input) => {
-        if (input.length !== 4) {
-          alert("4자리수를 입력해주세요!");
-          return false;
-        }
-        return true;
+        return validateInputCondition(input, "4자리수를 입력해주세요!");
       };
+
       const checkDuplicateValues = (input) => {
-        if (new Set(input).size !== 4) {
-          alert("숫자가 중복되면 안됩니다. 다른 조합을 입력해보세요.");
-          return false;
-        }
-        return true;
+        return validateInputCondition(
+          input,
+          "숫자가 중복되면 안됩니다. 다른 조합을 입력해보세요."
+        );
       };
+
       const checkIfTriedBefore = (input) => {
-        if (tries.includes(input)) {
-          alert("이전에 시도한 값입니다. 다른 조합을 입력해보세요.");
-          return false;
-        }
-        return true;
-      };
-      const validateInput = (input) => {
-        return (
-          checkFourDigitNumber(input) &&
-          checkDuplicateValues(input) &&
-          checkIfTriedBefore(input)
+        return validateInputCondition(
+          input,
+          "이전에 시도한 값입니다. 다른 조합을 입력해보세요."
         );
       };
 
@@ -113,12 +140,6 @@
         if (!validateInput(value) || checkAnswer(value) || checkDefeat()) {
           return;
         }
-        // if (checkAnswer(value)) {
-        //   return;
-        // }
-        // if (checkDefeat()) {
-        //   return;
-        // }
         updateLogs(value);
       });
     </script>
